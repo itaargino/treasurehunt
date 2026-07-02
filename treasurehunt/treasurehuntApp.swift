@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct treasurehuntApp: App {
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+                ContentView()
         }
     }
 }
