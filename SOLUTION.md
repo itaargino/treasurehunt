@@ -31,7 +31,7 @@ Substitua o início do `body`:
 ## 🗺️ Bloco 2 — Ilha → Floresta → Rio
 
 **Problema:** Os botões comuns não efetuam a navegação no histórico.
-**Solução:** Substituir `Button` por `NavigationLink` apontando para o respectivo valor da rota, e implementar o pop to root no botão de explorar mais.
+**Solução:** Substituir `Button` por `NavigationLink` apontando para o respectivo valor da rota, e implementar o pop to root (na poção) e o push programático (no explorar mais).
 
 ### 1. Modificação no arquivo [ContentView.swift](treasurehunt/ContentView.swift):
 Troque o botão de iniciar por um `NavigationLink`:
@@ -41,17 +41,17 @@ Troque o botão de iniciar por um `NavigationLink`:
                     // Por:
                     NavigationLink(value: "ilha") {
                         HStack {
-                            Text("Iniciar Jornada ⛵️")
+                            Text("Iniciar Jornada")
                                 .fontWeight(.black)
                                 .font(.headline)
                             Image(systemName: "arrow.right")
                         }
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color.yellow)
-                        .foregroundStyle(.black)
+                        .background(Color.cyan)
+                        .foregroundStyle(.white)
                         .cornerRadius(12)
-                        .shadow(color: .yellow.opacity(0.3), radius: 10, x: 0, y: 5)
+                        .shadow(color: .cyan.opacity(0.2), radius: 10, x: 0, y: 5)
                     }
 ```
 
@@ -67,10 +67,10 @@ Troque o botão por um `NavigationLink` enviando `"floresta"`:
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.yellow)
-                    .foregroundStyle(.black)
+                    .background(Color.cyan)
+                    .foregroundStyle(.white)
                     .cornerRadius(12)
-                    .shadow(color: .yellow.opacity(0.3), radius: 10, x: 0, y: 5)
+                    .shadow(color: .cyan.opacity(0.2), radius: 10, x: 0, y: 5)
                 }
 ```
 
@@ -86,17 +86,23 @@ Troque o botão por um `NavigationLink` enviando `"rio"`:
                     }
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.green)
+                    .background(Color.cyan)
                     .foregroundStyle(.white)
                     .cornerRadius(12)
-                    .shadow(color: .green.opacity(0.3), radius: 10, x: 0, y: 5)
+                    .shadow(color: .cyan.opacity(0.2), radius: 10, x: 0, y: 5)
                 }
 ```
 
 ### 4. Modificação no arquivo [RioView.swift](treasurehunt/GameViews/RioView.swift):
-Zerar o caminho de navegação (`path`) ao explorar mais a ilha (pop to root):
+Implementar o reset de rota (pop to root) ao beber a poção, e o avanço programático (push) ao explorar mais:
 ```swift
+    // Avança programaticamente empilhando a praia de novo
     private func explorarMais() {
+        path.append("ilha")
+    }
+    
+    // Zera a pilha para voltar ao início
+    private func beberPocao() {
         path = NavigationPath()
     }
 ```
@@ -105,7 +111,7 @@ Zerar o caminho de navegação (`path`) ao explorar mais a ilha (pop to root):
 
 ## 🐻 Bloco 3 — Urso e volta na ilha
 
-**Problema:** Ações de fuga, dar a volta na ilha e voltar ao barco não funcionam ou não manipulam a rota corretamente (e o botão de retorno da topbar sumiu).
+**Problema:** Ações de fuga e voltar ao barco não funcionam (e o botão de retorno da topbar sumiu).
 **Solução:** Alterar programaticamente a propriedade `@Binding var path`.
 
 ### Modificação no arquivo [CriaturaView.swift](treasurehunt/GameViews/CriaturaView.swift):
@@ -115,11 +121,6 @@ Zerar o caminho de navegação (`path`) ao explorar mais a ilha (pop to root):
         if !path.isEmpty {
             path.removeLast()
         }
-    }
-    
-    // Empilhar uma nova tela de ilha manualmente
-    private func darAVolta() {
-        path.append("ilha")
     }
     
     // Voltar tudo (pop to root)
@@ -132,8 +133,8 @@ Zerar o caminho de navegação (`path`) ao explorar mais a ilha (pop to root):
 
 ## 🔑 Bloco 4 — Baú e premiação
 
-**Problema:** O modelo `Baú` não compila ao tentar empilhar, o destino não responde, e a abertura do baú não realiza a navegação.
-**Solução:** Adicionar conformidade `Hashable` ao `Baú`, registrar `.navigationDestination(for: Baú.self)` na ContentView e usar `NavigationLink` para abrir a premiação.
+**Problema:** O modelo `Baú` não compila ao tentar empilhar, o destino não responde, e a premiação não abre por link de navegação.
+**Solução:** Adicionar conformidade `Hashable` ao `Baú`, registrar os destinos na ContentView e usar `NavigationLink` para abrir a premiação.
 
 ### 1. Modificação no arquivo [CriaturaView.swift](treasurehunt/GameViews/CriaturaView.swift):
 Descomente a linha que passa o objeto `Baú` no `path.append` e comente a linha que passa a String `"bau"`:
@@ -158,7 +159,7 @@ struct Baú: Hashable {
 }
 ```
 
-Substitua o botão de abrir por um `NavigationLink` enviando o valor `"premiacao"`. Use `.disabled(!baú.temChave)` para que o link só funcione se o baú tiver a chave:
+Substitua o botão de abrir por um `NavigationLink` enviando o valor `"premiacao"`. Use `.disabled(!baú.temChave)` para que o link só funcione se o baú tiver a chave (com fundo cinza se desabilitado):
 ```swift
                     // Substitua o Button por:
                     NavigationLink(value: "premiacao") {
@@ -169,23 +170,23 @@ Substitua o botão de abrir por um `NavigationLink` enviando o valor `"premiacao
                         }
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(baú.temChave ? Color.yellow : Color.gray)
-                        .foregroundStyle(.black)
+                        .background(baú.temChave ? Color.cyan : Color.gray)
+                        .foregroundStyle(.white)
                         .cornerRadius(12)
-                        .shadow(color: .yellow.opacity(0.3), radius: 10, x: 0, y: 5)
+                        .shadow(color: .cyan.opacity(0.2), radius: 10, x: 0, y: 5)
                     }
                     .disabled(!baú.temChave)
 ```
 
 ### 3. Modificação no arquivo [ContentView.swift](treasurehunt/ContentView.swift):
-Registre as rotas na `ContentView.swift`. Adicione a rota `"premiacao"` no `String` destinations e ative o destino do `Baú`:
+Registre as rotas na `ContentView.swift`. Adicione a rota `"premiacao"` no `String` destinations (passando o binding da rota) e ative o destino do `Baú`:
 ```swift
         // Registro de rotas baseadas em Strings
         .navigationDestination(for: String.self) { rota in
             switch rota {
             // ... outros cases ...
             case "premiacao":
-                PremiacaoView()
+                PremiacaoView(path: $path)
             default:
                 EmptyView()
             }
@@ -194,6 +195,19 @@ Registre as rotas na `ContentView.swift`. Adicione a rota `"premiacao"` no `Stri
         .navigationDestination(for: Baú.self) { baú in
             BauView(baú: baú, path: $path)
         }
+```
+
+### 4. Modificação no arquivo [PremiacaoView.swift](treasurehunt/GameViews/PremiacaoView.swift):
+Faça o botão "Comemorar e Fechar" limpar a pilha de navegação (pop to root):
+```swift
+                // Action to Pop to Root
+                Button(action: {
+                    path = NavigationPath()
+                }) {
+                    Text("Comemorar e Fechar")
+                        .fontWeight(.bold)
+                        // ... styling ...
+                }
 ```
 
 ---

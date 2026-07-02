@@ -68,29 +68,14 @@ struct CriaturaView: View {
                         .cornerRadius(12)
                     }
                     
-                    // Action 2: Go around the island (Programmatic Append)
+
+                    // Action 3: Use teleport potion to go back to start (Pop to root)
                     Button(action: {
-                        darAVolta()
+                        usarPocao()
                     }) {
                         HStack {
-                            Image(systemName: "arrow.triangle.2.circlepath")
-                            Text("Dar a volta na ilha (Ir para a Praia)")
-                                .fontWeight(.bold)
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .foregroundStyle(.white)
-                        .cornerRadius(12)
-                    }
-                    
-                    // Action 3: Go back to boat/start (Pop to root)
-                    Button(action: {
-                        voltarParaOBarco()
-                    }) {
-                        HStack {
-                            Image(systemName: "ferry.fill")
-                            Text("Voltar ao Início (Pop to Root)")
+                            Image(systemName: "flask.fill")
+                            Text("Usar Poção (Fugir ao Início)")
                                 .fontWeight(.bold)
                         }
                         .padding()
@@ -102,14 +87,8 @@ struct CriaturaView: View {
                     
                     // Action 4: Confront the Bear to find the chest (Pushes chest)
                     Button(action: {
-                        // TODO: Bloco 4 - Para passar o baú com a chave (temChave: true), você precisa:
-                        // 1. Comentar a linha abaixo (navegação genérica por String)
-                        // 2. Descomentar a linha com a struct Baú
-                        // 3. Fazer a struct Baú conformar a Hashable em BauView.swift para o compilador aceitar
-                        path.append("bau")
-                        
-                        // let meuBau = Baú(id: UUID(), temChave: true)
-                        // path.append(meuBau)
+                        let meuBau = Baú(id: UUID(), temChave: true)
+                        path.append(meuBau)
                     }) {
                         HStack {
                             Image(systemName: "shield.fill")
@@ -136,22 +115,15 @@ struct CriaturaView: View {
         .navigationBarBackButtonHidden(true)
     }
     
-    // TODO: Bloco 3 - Fugir deveria voltar apenas 1 tela no histórico de navegação.
-    // Hack: Remova o último item do 'path'.
     private func fugir() {
-        // Implementar pop de 1 tela
+        if !path.isEmpty {
+            path.removeLast()
+        }
     }
+
     
-    // TODO: Bloco 3 - Dar a volta na ilha deveria empilhar a praia (IlhaView) programaticamente.
-    // Hack: Dê um append do valor "ilha" na variável 'path'.
-    private func darAVolta() {
-        // Implementar navegação programática
-    }
-    
-    // TODO: Bloco 3 - Achar o baú / Desistir deveria voltar tudo para o mapa de uma vez.
-    // Hack: Zere a variável 'path'.
-    private func voltarParaOBarco() {
-        // Implementar pop to root
+    private func usarPocao() {
+        path = NavigationPath()
     }
 }
 

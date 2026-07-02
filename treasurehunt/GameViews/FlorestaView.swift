@@ -52,11 +52,7 @@ struct FlorestaView: View {
                 Spacer()
                 
                 // Navigation Action
-                // TODO: Bloco 2 - Trocar o Button comum por um NavigationLink para empilhar o RioView.
-                // O destino deve ser o valor "rio".
-                Button(action: {
-                    // Este botão comum não faz nada! Corrija para um NavigationLink
-                }) {
+                NavigationLink(value: "rio") {
                     HStack {
                         Text("Seguir para o Rio")
                             .fontWeight(.bold)

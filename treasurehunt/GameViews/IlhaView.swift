@@ -52,11 +52,7 @@ struct IlhaView: View {
                 Spacer()
                 
                 // Navigation Action
-                // TODO: Bloco 2 - Trocar o Button comum por um NavigationLink para empilhar a FlorestaView.
-                // O destino deve ser o valor "floresta".
-                Button(action: {
-                    // Este botão comum não faz nada! Corrija para um NavigationLink
-                }) {
+                NavigationLink(value: "floresta") {
                     HStack {
                         Text("Entrar na Floresta")
                             .fontWeight(.bold)

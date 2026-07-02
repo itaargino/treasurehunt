@@ -6,7 +6,7 @@
 import SwiftUI
 
 struct PremiacaoView: View {
-    @Environment(\.dismiss) private var dismiss
+    @Binding var path: NavigationPath
     
     var body: some View {
         ZStack {
@@ -47,9 +47,9 @@ struct PremiacaoView: View {
                 
                 Spacer()
                 
-                // Action to Dismiss
+                // Action to Pop to Root
                 Button(action: {
-                    dismiss()
+                    path = NavigationPath()
                 }) {
                     Text("Comemorar e Fechar")
                         .fontWeight(.bold)
@@ -69,5 +69,5 @@ struct PremiacaoView: View {
 }
 
 #Preview {
-    PremiacaoView()
+    PremiacaoView(path: .constant(NavigationPath()))
 }

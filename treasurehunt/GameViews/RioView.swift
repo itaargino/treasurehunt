@@ -35,7 +35,7 @@ struct RioView: View {
                         .foregroundStyle(.cyan)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    Text("Um rio violento e caudaloso bloqueia sua passagem. Não há pontes à vista. Você pode escolher explorar um pouco mais a ilha para encontrar outra rota, ou entrar na caverna sombria que fica logo acima nas rochas.")
+                    Text("Um rio violento e caudaloso bloqueia sua passagem. Não há pontes à vista. Você pode escolher explorar mais a ilha, ou entrar na caverna sombria que fica logo acima nas rochas.")
                         .font(.body)
                         .foregroundStyle(.black.opacity(0.8))
                         .lineSpacing(4)
@@ -51,8 +51,9 @@ struct RioView: View {
                 
                 Spacer()
                 
-                // Block 2: Pop to root action
-                VStack(spacing: 14) {
+                // Block 2: Programmatic Push
+                VStack(spacing: 12) {
+                    // Explorar Mais (Programmatic Append)
                     Button(action: {
                         explorarMais()
                     }) {
@@ -93,10 +94,8 @@ struct RioView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
-    // TODO: Bloco 2 - Explorar mais a ilha deveria resetar a pilha (Pop to root) voltando para a praia inicial.
-    // Hack: Zere a variável 'path'.
     private func explorarMais() {
-        // Implementar reset da rota aqui
+        path.append("ilha")
     }
 }
 
